@@ -1,0 +1,1 @@
+curl -v 'http://127.0.0.1:8080/archiver/rest/v1/activity/summary?from=1775928998039&to=1775929298039&tz=Europe/London&interval=0&id=5'
