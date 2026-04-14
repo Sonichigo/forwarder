@@ -1,6 +1,7 @@
 import logging
 import os
 from datetime import datetime, timezone
+from time import time
 from zoneinfo import ZoneInfo
 from urllib.parse import quote
 
@@ -58,6 +59,12 @@ def rewrite_archiver_request():
                 "error": "Both 'from' and 'to' query parameters are required"
             }), 400
 
+        # Allow use of relative values for from/to with 0 = now and -xxxms = (now -xxx ms)
+        if int(from_raw) < 1:
+            from_raw = int(time() * 1000) + int(from_raw)
+        if int(to_raw) < 1:
+            to_raw = int(time() * 1000) + int(to_raw)
+
         rewritten_params = request.args.to_dict(flat=True)
         rewritten_params["from"] = epoch_ms_to_formatted(from_raw, tz_name)
         rewritten_params["to"] = epoch_ms_to_formatted(to_raw, tz_name)
@@ -74,22 +81,21 @@ def rewrite_archiver_request():
             upstream.headers.get("Content-Type")
         )
 
-        excluded_headers = {
-            "content-encoding",
-            "content-length",
-            "transfer-encoding",
-            "connection"
-        }
-        headers = [
-            (k, v) for k, v in upstream.headers.items()
-            if k.lower() not in excluded_headers
-        ]
+        # Parse upstream json
+        data = upstream.json()
 
-        return Response(
-            upstream.content,
-            status=upstream.status_code,
-            headers=headers
-        )
+        # Generate timestamp (mid time between from and to)
+        mid = epoch_ms_to_formatted(int((int(from_raw) + int(to_raw)) / 2), tz_name)
+
+        if isinstance(data, list):
+            for item in data:
+                if isinstance(item, dict):
+                    item["timestamp"] = mid
+
+        # wrap in outer array
+        wrapped = [data]
+
+        return jsonify(wrapped), upstream.status_code
 
     except ValueError:
         logger.exception("Invalid epoch value in request args=%s", request.args.to_dict(flat=True))
