@@ -13,8 +13,8 @@ spec:
         app: forwarder
     spec:
       containers:
-        - name: archiver-rewriter
-          image: sonichigo/forwarder:1
+        - name: forwarder
+          image: ghcr.io/sonichigo/forwarder:1
           imagePullPolicy: Always
           ports:
             - containerPort: 8081
