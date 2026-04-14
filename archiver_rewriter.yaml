@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: archiver-rewriter
-          image: markjefferyap/archiver-rewriter:3
+          image: markjefferyap/archiver-rewriter:4
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
