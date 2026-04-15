@@ -10,7 +10,7 @@ from flask import Flask, request, Response, jsonify
 
 app = Flask(__name__)
 
-TARGET_BASE_URL = os.environ.get("TARGET_BASE_URL", "https://play.dbmarlin.com")
+TARGET_BASE_URL = os.environ.get("TARGET_BASE_URL", "http://34.83.129.106:9090")
 
 # Log to stdout/stderr in a container-friendly way
 logging.basicConfig(
