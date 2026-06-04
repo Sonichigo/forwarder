@@ -14,13 +14,13 @@ spec:
     spec:
       containers:
         - name: forwarder
-          image: ghcr.io/sonichigo/forwarder:1
+          image: markjefferyap/archiver-rewriter:5
           imagePullPolicy: Always
           ports:
             - containerPort: 8081
           env:
             - name: TARGET_BASE_URL
-              value: "https://play.dbmarlin.com"
+              value: "http://34.83.129.106:9090"
           readinessProbe:
             httpGet:
               path: /healthz
