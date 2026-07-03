@@ -20,7 +20,7 @@ spec:
             - containerPort: 8081
           env:
             - name: TARGET_BASE_URL
-              value: "http://34.83.129.106:9090"
+              value: "http://136.118.15.28:9090"
           readinessProbe:
             httpGet:
               path: /healthz
