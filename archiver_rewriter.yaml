@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: forwarder
-          image: markjefferyap/archiver-rewriter:5
+          image: ghcr.io/sonichigo/forwarder:5
           imagePullPolicy: Always
           ports:
             - containerPort: 8081
